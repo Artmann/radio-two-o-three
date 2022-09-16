@@ -29,7 +29,7 @@ export function BottomBar(): ReactElement | null {
     seekTo: (position: number) => seekTo(episode, position)
   }
 
-  const isVisible = !!context.episode && bottomBarIsVisible
+  const isVisible = !!context.episode?.title && bottomBarIsVisible
 
   return (
     <motion.div
