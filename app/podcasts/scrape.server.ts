@@ -89,6 +89,8 @@ export async function scrapePodcast(id: string): Promise<void> {
       }
     }
 
+    podcast.hasBeenScraped = true
+
     await podcast.save()
 
     console.log('Done.')
