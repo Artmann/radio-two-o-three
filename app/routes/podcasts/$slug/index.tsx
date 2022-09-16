@@ -3,6 +3,7 @@ import { Link, useLoaderData } from '@remix-run/react'
 import { format, parseISO } from 'date-fns'
 import { ReactElement, useState } from 'react'
 import { NotFoundPage } from '~/components/not-found-page'
+import { PodcastImage } from '~/components/podcast-image'
 
 import { findPodcastBySlug, PodcastDto, PodcastEpisodeDto } from '~/podcasts'
 
@@ -39,9 +40,9 @@ export default function PodcastRoute(): ReactElement {
     <div className='p-8 max-w-xl mx-auto'>
       <div className='flex flex-col gap-8 items-center'>
 
-        <img
+        <PodcastImage
           alt={ podcast.title }
-          className='block w-64 h-64 rounded-md shadow-md'
+          size='medium'
           src={ podcast.imageUrl }
         />
 

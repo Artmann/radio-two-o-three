@@ -11,12 +11,17 @@ export interface PodcastPlayerProps {
 
 export interface PlayerContextProps {
   addEpisode: (episode: PodcastEpisodeDto) => void
+  bottomBarIsVisible: boolean
   currentTime: (episodeId: string) => number
   duration: (episodeId: string) => number
+  hideBottomBar: () => void
   isPlaying: (episodeId: string) => boolean
   play: (episode: PodcastEpisodeDto) => void
   pause: () => void
   seekTo: (episode: PodcastEpisodeDto, position: number) => void
+  showBottomBar: () => void
+
+  episode?: PodcastEpisodeDto
 }
 
 export const PlayerContext = createContext<PlayerContextProps>({} as PlayerContextProps)
@@ -38,6 +43,8 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
   const [ seekToPosition, setSeekToPosition ] = useState<number>()
   const [ startPosition, setStartPosition ] = useState<number>(0)
 
+  const [ bottomBarIsVisible, setBottomBarIsVisible ] = useState(true)
+
   const currentTime = useCallback((episodeId: string): number => {
     return positions[episodeId] ?? 0
   }, [ positions ])
@@ -45,6 +52,8 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
   const duration = useCallback((episodeId: string): number => {
     return durations[episodeId] ?? 0
   }, [durations])
+
+  const hideBottomBar = () => setBottomBarIsVisible(false)
 
   const isPlaying = (episodeId: string) => {
     if (episodeId !== currentEpisode?.id) {
@@ -88,15 +97,7 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
     setSeekToPosition(position)
   }
 
-  const context = {
-    addEpisode,
-    currentTime,
-    duration,
-    isPlaying,
-    play,
-    pause,
-    seekTo
-  }
+  const showBottomBar = () => setBottomBarIsVisible(true)
 
   useEffect(function loadAudio() {
     if (!currentEpisode) {
@@ -212,7 +213,7 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
   useEffect(function loadState() {
     const loadedEpisode = load<PodcastEpisodeDto>('current-episode')
 
-    setCurrentEpisode(currentEpisode)
+    setCurrentEpisode(loadedEpisode)
 
     setEpisodes(load('episodes'))
     setDurations(load('durations'))
@@ -225,6 +226,20 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
 
     setHasLoadedInitialData(true)
   }, [])
+
+  const context = {
+    addEpisode,
+    bottomBarIsVisible,
+    currentTime,
+    duration,
+    episode: currentEpisode,
+    hideBottomBar,
+    isPlaying,
+    play,
+    pause,
+    seekTo,
+    showBottomBar
+  }
 
   return (
     <>

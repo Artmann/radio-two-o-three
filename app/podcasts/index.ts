@@ -28,6 +28,7 @@ export type PodcastEpisodeDto = {
   }
   slug: string
   title: string
+  url: string
 }
 
 export async function findPodcastBySlug(slug: string): Promise<{
@@ -48,7 +49,7 @@ export async function findPodcastBySlug(slug: string): Promise<{
 
     return {
       podcast: transformPodcast(podcast),
-      episodes: episodes.map(transformPodcastEpisode)
+      episodes: episodes.map(episode => transformPodcastEpisode(episode, podcast))
     }
 
   } catch (error) {
@@ -87,7 +88,7 @@ function transformPodcast(podcast: Podcast): PodcastDto {
   }
 }
 
-function transformPodcastEpisode(episode: PodcastEpisode): PodcastEpisodeDto {
+function transformPodcastEpisode(episode: PodcastEpisode, podcast: Podcast): PodcastEpisodeDto {
   return {
     description: episode.description,
     duration: episode.duration ?? 0,
@@ -98,5 +99,6 @@ function transformPodcastEpisode(episode: PodcastEpisode): PodcastEpisodeDto {
     source: episode.source,
     slug: episode.slug,
     title: episode.title,
+    url: `/podcasts/${ podcast.slug }/episodes/${ episode.slug }`
   }
 }

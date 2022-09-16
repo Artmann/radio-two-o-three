@@ -7,6 +7,7 @@ import {
   PlayIcon
 } from '@heroicons/react/24/solid'
 
+import { Icon } from '../icon'
 import { formatTime } from '../time'
 import TrackBar from '../track-bar'
 
@@ -79,7 +80,7 @@ export default function BigPlayerControls({
         `}
       >
         <Icon
-          onClick={ () => seek(currentTime - 10) }
+          onClick={ () => seekTo(currentTime - 10) }
           icon={ <ArrowUturnLeftIcon /> }
           size='medium'
         />
@@ -95,60 +96,12 @@ export default function BigPlayerControls({
         />
 
         <Icon
-          onClick={ () => seek(currentTime + 30) }
+          onClick={ () => seekTo(currentTime + 30) }
           icon={ <ArrowUturnRightIcon /> }
           size='medium'
         />
       </div>
 
-    </div>
-  )
-}
-
-type IconProps = {
-  icon: ReactElement
-  size?: 'small' | 'medium' | 'large'
-  onClick?: () => void
-}
-
-function Icon({ icon, size, onClick }: IconProps): ReactElement {
-  const containerSize = () => {
-    switch (size) {
-      case 'small':
-        return 'w-8 h-8'
-      case 'medium':
-        return 'w-10 h-10'
-      case 'large':
-        return 'w-12 h-12'
-    }
-  }
-  const iconSize = () => {
-    switch (size) {
-      case 'small':
-        return 'w-3 h-3'
-      case 'medium':
-        return 'w-5 h-5'
-      case 'large':
-        return 'w-6 h-6'
-    }
-  }
-
-  return (
-    <div
-      className={`
-        flex items-center justify-center
-        rounded-full
-        cursor-pointer
-        ${ containerSize() }
-      `}
-      onClick={ onClick }
-      style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.15)'
-      }}
-    >
-      <div className={ iconSize() }>
-        { icon }
-      </div>
     </div>
   )
 }

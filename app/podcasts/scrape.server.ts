@@ -48,7 +48,6 @@ export async function scrapePodcast(id: string): Promise<void> {
     podcast.author = data.author
     podcast.description = data.description
     podcast.imageUrl = data.image
-    podcast.hasBeenScraped = true
 
     console.log(`Processing ${ data.episodes.length } episodes.`)
 
@@ -60,7 +59,7 @@ export async function scrapePodcast(id: string): Promise<void> {
       if (existingEpisode) {
         existingEpisode.description = episode.description
         existingEpisode.duration = episode.duration
-        existingEpisode.imageUrl = episode.image
+        existingEpisode.imageUrl = episode.image ?? podcast.imageUrl,
         existingEpisode.publishedAt = dayjs(episode.published).toISOString()
         existingEpisode.source = {
           length: episode.duration,
@@ -77,7 +76,7 @@ export async function scrapePodcast(id: string): Promise<void> {
           podcastId: podcast.id,
           description: episode.description,
           duration: episode.duration,
-          imageUrl: episode.image,
+          imageUrl: episode.image ?? podcast.imageUrl,
           publishedAt: dayjs(episode.published).toISOString(),
           source: {
             length: episode.duration,

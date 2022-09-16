@@ -9,6 +9,7 @@ import {
 } from '@remix-run/react'
 
 import styles from './app.css'
+import { BottomBar } from './components/player/bottom-bar'
 import { PodcastPlayer } from './podcast-player'
 import tailwind from './tailwind.css'
 
@@ -33,10 +34,12 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className='text-gray-700'>
+      <body className='text-gray-700 pb-24'>
 
         <PodcastPlayer>
           <Outlet />
+
+          <BottomBar />
         </PodcastPlayer>
 
         <ScrollRestoration />

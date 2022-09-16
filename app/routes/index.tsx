@@ -1,6 +1,7 @@
 import { LoaderFunction } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { ReactElement } from 'react'
+import { PodcastImage } from '~/components/podcast-image'
 
 import { listAllPodcasts, PodcastDto } from '~/podcasts'
 
@@ -49,22 +50,17 @@ function PodcastCard({ podcast }: { podcast: PodcastDto }): ReactElement {
       `}
       to={ `/podcasts/${ podcast.slug }` }
     >
-      <img
+      <PodcastImage
         alt={ podcast.title }
         src={ podcast.imageUrl }
-        className={`
-          block
-          w-32 h-32
-          rounded-lg shadow-md
-          mb-4
-        `}
+        size='small'
       />
 
       <div
         className={`
           w-full truncate
           text-sm font-semibold
-          mb-1
+          mb-1 mt-4
         `}
       >
         { podcast.title }

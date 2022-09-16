@@ -5,7 +5,9 @@ import { format, parseISO } from 'date-fns'
 import { ReactElement, useContext, useEffect } from 'react'
 import { NotFoundPage } from '~/components/not-found-page'
 import BigPlayerControls from '~/components/player/big'
+import { PodcastImage } from '~/components/podcast-image'
 import { PlayerContext } from '~/podcast-player'
+import { useHideBottomBar } from '~/podcast-player/use-hide-bottom-bar'
 
 import { findPodcastBySlug, PodcastDto, PodcastEpisodeDto } from '~/podcasts'
 
@@ -44,11 +46,13 @@ export default function EpisodeRoute(): ReactElement {
     seekTo
   } = useContext(PlayerContext)
 
+  useHideBottomBar()
+
   useEffect(() => {
     if (episode) {
       addEpisode(episode)
     }
-  }, [episode])
+  }, [ episode ])
 
   if (!podcast) {
     return (
@@ -87,9 +91,9 @@ export default function EpisodeRoute(): ReactElement {
             max-w-xl mx-auto
           `}
         >
-          <img
+          <PodcastImage
             alt={ episode.title }
-            className='block w-64 h-64 rounded-md shadow-md'
+            size='medium'
             src={ episode.imageUrl ?? podcast.imageUrl }
           />
 
