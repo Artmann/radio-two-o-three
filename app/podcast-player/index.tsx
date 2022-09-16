@@ -7,12 +7,13 @@ export interface PodcastPlayerProps {
 }
 
 export interface PlayerContextProps {
+  addEpisode: (episode: PodcastEpisodeDto) => void
   currentTime: (episodeId: string) => number
   duration: (episodeId: string) => number
   isPlaying: (episodeId: string) => boolean
   play: (episode: PodcastEpisodeDto) => void
   pause: () => void
-  seekTo: (position: number) => void
+  seekTo: (episode: PodcastEpisodeDto, position: number) => void
 }
 
 export const PlayerContext = createContext<PlayerContextProps>({} as PlayerContextProps)
@@ -28,6 +29,8 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
 
   const [ durations, setDurations ] = useState<Record<string, number>>({})
   const [ positions, setPositions ] = useState<Record<string, number>>({})
+
+  const [ seekToPosition, setSeekToPosition ] = useState<number>()
 
   const currentTime = useCallback((episodeId: string): number => {
     return positions[episodeId] ?? 0
@@ -45,6 +48,18 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
     return isPlayingCurrentEpisode
   }
 
+  const addEpisode = (episode: PodcastEpisodeDto) => {
+    setEpisodes({
+      ...episodes,
+      [episode.id]: episode
+    })
+    console.log(episode)
+    setDurations({
+      ...durations,
+      [episode.id]: episode.duration ?? 0
+    })
+  }
+
   const play = (episode: PodcastEpisodeDto) => {
     setCurrentEpisode(episode)
     setEpisodes({
@@ -58,11 +73,18 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
     setIsPlayingCurrentEpisode(false)
   }
 
-  const seekTo = (position: number) => {
-
+  const seekTo = (episode: PodcastEpisodeDto, position: number) => {
+    setCurrentEpisode(episode)
+    setEpisodes({
+      ...episodes,
+      [ episode.id ]: episode
+    })
+    setIsPlayingCurrentEpisode(true)
+    setSeekToPosition(position)
   }
 
   const context = {
+    addEpisode,
     currentTime,
     duration,
     isPlaying,
@@ -83,6 +105,10 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
     console.log('Start loading audio.')
 
     audioRef.current.onloadeddata = () => {
+      if (!audioRef.current) {
+        return
+      }
+
       console.log('Audio loaded.')
 
       setDurations({
@@ -90,6 +116,7 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
         [ currentEpisode.id ]: Math.round(audioRef.current?.duration ?? 0)
       })
       setIsBuffering(false)
+
       if (audioRef.current) {
         audioRef.current.volume = 0.1
       }
@@ -129,6 +156,25 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
       clearInterval(interval)
     }
   }, [ isPlayingCurrentEpisode, currentEpisode?.id ])
+
+  useEffect(function seekToPositionHandler() {
+    if (!audioRef.current) {
+      return
+    }
+
+    if (isBuffering) {
+      return
+    }
+
+    if (!seekToPosition) {
+      return
+    }
+
+    console.log('Seeking to position', seekToPosition)
+
+    audioRef.current.currentTime = seekToPosition
+
+  }, [ seekToPosition, isBuffering ])
 
   return (
     <>

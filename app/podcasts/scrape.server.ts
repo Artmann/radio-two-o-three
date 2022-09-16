@@ -69,6 +69,8 @@ export async function scrapePodcast(id: string): Promise<void> {
         }
         existingEpisode.title = episode.title
         existingEpisode.slug = slugify(episode.title)
+
+        await existingEpisode.save()
       } else {
         await PodcastEpisode.create({
           id: episodeId,

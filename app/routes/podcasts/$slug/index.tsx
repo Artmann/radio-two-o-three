@@ -36,7 +36,7 @@ export default function PodcastRoute(): ReactElement {
   }
 
   return (
-    <div className='p-8'>
+    <div className='p-8 max-w-xl mx-auto'>
       <div className='flex flex-col gap-8 items-center'>
 
         <img
@@ -105,7 +105,6 @@ function EpisodeRow({ episode, podcast }: EpisodeRowProps): ReactElement {
   )
 }
 
-
 function ExpandableText({ text }: { text: string }): ReactElement {
   const [ expanded, setExpanded ] = useState(false)
 
@@ -120,7 +119,7 @@ function ExpandableText({ text }: { text: string }): ReactElement {
         { text }
       </div>
       <div
-        className='text-xs'
+        className='text-xs cursor-pointer text-gray-500'
         onClick={ () => setExpanded(!expanded) }
       >
         { expanded ? 'Read less' : 'Read more' }

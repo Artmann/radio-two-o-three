@@ -43,7 +43,7 @@ export default function BigPlayerControls({
   const play = () => {
     callbacks.play()
   }
-  const seek = (position: number) => {
+  const seekTo = (position: number) => {
     callbacks.seekTo(position)
   }
 
@@ -57,7 +57,7 @@ export default function BigPlayerControls({
             className="mb-2"
             current={ currentTime }
             max={ duration }
-            seekTo={ seek }
+            seekTo={ seekTo }
           />
         </div>
 
