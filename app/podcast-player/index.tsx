@@ -1,6 +1,9 @@
+import { debounce } from 'lodash'
 import { ReactElement, createContext, useState, useRef, useEffect, useCallback } from 'react'
 
 import { PodcastEpisodeDto } from '~/podcasts'
+
+import { load, save } from './persistance'
 
 export interface PodcastPlayerProps {
   children: string | ReactElement | ReactElement[]
@@ -21,6 +24,8 @@ export const PlayerContext = createContext<PlayerContextProps>({} as PlayerConte
 export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
   const audioRef = useRef<HTMLAudioElement>(null);
 
+  const [ hasLoadedInitialData, setHasLoadedInitialData ] = useState(false)
+
   const [ episodes, setEpisodes ] = useState<Record<string, PodcastEpisodeDto>>({})
   const [ currentEpisode, setCurrentEpisode ] = useState<PodcastEpisodeDto>()
 
@@ -31,6 +36,7 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
   const [ positions, setPositions ] = useState<Record<string, number>>({})
 
   const [ seekToPosition, setSeekToPosition ] = useState<number>()
+  const [ startPosition, setStartPosition ] = useState<number>(0)
 
   const currentTime = useCallback((episodeId: string): number => {
     return positions[episodeId] ?? 0
@@ -53,7 +59,6 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
       ...episodes,
       [episode.id]: episode
     })
-    console.log(episode)
     setDurations({
       ...durations,
       [episode.id]: episode.duration ?? 0
@@ -117,6 +122,8 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
       })
       setIsBuffering(false)
 
+      audioRef.current.currentTime = startPosition
+
       if (audioRef.current) {
         audioRef.current.volume = 0.1
       }
@@ -140,23 +147,6 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
     }
   }, [ isPlayingCurrentEpisode, isBuffering ])
 
-  useEffect(function updateCurrentTime() {
-    if (!audioRef.current) {
-      return
-    }
-
-    const interval = setInterval(() => {
-      setPositions({
-        ...positions,
-        [ currentEpisode?.id ?? '' ]: Math.round(audioRef.current?.currentTime ?? 0)
-      })
-    }, 10)
-
-    return () => {
-      clearInterval(interval)
-    }
-  }, [ isPlayingCurrentEpisode, currentEpisode?.id ])
-
   useEffect(function seekToPositionHandler() {
     if (!audioRef.current) {
       return
@@ -172,9 +162,69 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
 
     console.log('Seeking to position', seekToPosition)
 
-    audioRef.current.currentTime = seekToPosition
+    audioRef.current.currentTime = seekToPosition ?? 0
 
   }, [ seekToPosition, isBuffering ])
+
+  useEffect(function updateCurrentTime() {
+    if (!audioRef.current) {
+      return
+    }
+
+    const interval = setInterval(() => {
+      if (!isPlayingCurrentEpisode) {
+        return
+      }
+
+      const previousPosition = positions[currentEpisode?.id ?? ''] ?? 0
+      const position = Math.round(audioRef.current?.currentTime ?? 0)
+
+      if (position === previousPosition) {
+        return
+      }
+
+      setPositions({
+        ...positions,
+        [ currentEpisode?.id ?? '' ]: position
+      })
+    }, 50)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [ isPlayingCurrentEpisode, currentEpisode?.id, positions ])
+
+  useEffect(function saveState() {
+    if (!hasLoadedInitialData) {
+      return
+    }
+
+    if (!isPlayingCurrentEpisode) {
+      return
+    }
+
+    debounce(() => save('episodes', episodes), 200)()
+    debounce(() => save('current-episode', currentEpisode), 200)()
+    debounce(() => save('durations', durations), 200)()
+    debounce(() => save('positions', positions), 200)()
+  }, [episodes, currentEpisode, durations, positions, hasLoadedInitialData, isPlayingCurrentEpisode ])
+
+  useEffect(function loadState() {
+    const loadedEpisode = load<PodcastEpisodeDto>('current-episode')
+
+    setCurrentEpisode(currentEpisode)
+
+    setEpisodes(load('episodes'))
+    setDurations(load('durations'))
+
+    const loadedPositions = load<Record<string, number>>('positions')
+    const currentPosition = loadedPositions[loadedEpisode.id] ?? 0
+
+    setPositions(loadedPositions)
+    setStartPosition(currentPosition)
+
+    setHasLoadedInitialData(true)
+  }, [])
 
   return (
     <>
