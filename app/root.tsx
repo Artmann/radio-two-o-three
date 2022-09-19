@@ -25,6 +25,7 @@ export const meta: MetaFunction = () => ({
   charset: 'utf-8',
   title: 'Radio 203',
   viewport: 'width=device-width,initial-scale=1',
+  'google-site-verification': 'gzmBSaol-4iwzsg9IqkkjMVam1ym1Q4HHm7cRskerSU'
 })
 
 export default function App() {
