@@ -38,12 +38,14 @@ export default function EpisodeRoute(): ReactElement {
 
   const {
     addEpisode,
+    changeVolume,
     currentTime,
     duration,
     isPlaying,
     play,
     pause,
-    seekTo
+    seekTo,
+    volume
   } = useContext(PlayerContext)
 
   useHideBottomBar()
@@ -67,6 +69,9 @@ export default function EpisodeRoute(): ReactElement {
   }
 
   const callbacks = {
+    changeVolume: (volume: number) => {
+      changeVolume(episode.id, volume)
+    },
     play: () => play(episode),
     pause,
     seekTo: (position: number) => {
@@ -108,6 +113,7 @@ export default function EpisodeRoute(): ReactElement {
             currentTime={ currentTime(episode.id) }
             duration={ duration(episode.id) || episode.duration }
             isPlaying={ isPlaying(episode.id) }
+            volume={ volume(episode.id) }
           />
         </div>
       </div>

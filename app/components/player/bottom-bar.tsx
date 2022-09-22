@@ -12,18 +12,23 @@ export function BottomBar(): ReactElement | null {
   const context = useContext(PlayerContext)
   const {
     bottomBarIsVisible,
+    changeVolume,
     currentTime,
     duration,
     isPlaying,
     pause,
     play,
     seekTo,
+    volume
   } = context
 
   const episode = context.episode ?? {} as PodcastEpisodeDto
   const episodeId = episode?.id ?? ''
 
   const callbacks = {
+    changeVolume: (volume: number) => {
+      changeVolume(episode.id, volume)
+    },
     pause: () => pause(),
     play: () => play(episode),
     seekTo: (position: number) => seekTo(episode, position)
@@ -63,11 +68,12 @@ export function BottomBar(): ReactElement | null {
 
         <div>
           <SmallControls
-            backgroundColor='hsl(202, 5%, 85%, 0.15)'
+            backgroundColor='hsl(202, 5%, 85%, 0.35)'
             callbacks={ callbacks }
             currentTime={ currentTime(episodeId) }
             duration={ duration(episodeId) }
             isPlaying={ isPlaying(episodeId) }
+            volume={ volume(episodeId) }
           />
         </div>
       </div>

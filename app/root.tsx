@@ -7,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react'
+import { StrictMode } from 'react'
 
 import styles from './app.css'
 import { BottomBar } from './components/player/bottom-bar'
@@ -37,11 +38,13 @@ export default function App() {
       </head>
       <body className='text-gray-700 pb-24'>
 
-        <PodcastPlayer>
-          <Outlet />
+        <StrictMode>
+          <PodcastPlayer>
+            <Outlet />
 
-          <BottomBar />
-        </PodcastPlayer>
+            <BottomBar />
+          </PodcastPlayer>
+        </StrictMode>
 
         <ScrollRestoration />
         <Scripts />

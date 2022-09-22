@@ -1,20 +1,23 @@
-import { ReactElement } from 'react'
+import { FormEvent, ReactElement, useEffect, useRef, useState } from 'react'
 //@ts-ignore
 import {
   ArrowUturnLeftIcon,
   ArrowUturnRightIcon,
   PauseIcon,
-  PlayIcon
+  PlayIcon,
+  SpeakerWaveIcon
 } from '@heroicons/react/24/solid'
 
 import { Icon } from '../icon'
 import { formatTime } from '../time'
 import TrackBar from '../track-bar'
+import { VolumeBar } from '../volume-bar'
 
 export interface BigPlayerControlsProps {
   isPlaying: boolean
 
   callbacks: {
+    changeVolume: (volume: number) => void
     play: () => void
     pause: () => void
     seekTo: (position: number) => void
@@ -22,6 +25,7 @@ export interface BigPlayerControlsProps {
 
   currentTime: number
   duration: number
+  volume: number
 
   className?: string
 }
@@ -31,9 +35,8 @@ export default function BigPlayerControls({
   className,
   currentTime,
   duration,
-  isPlaying
-
-
+  isPlaying,
+  volume
 }: BigPlayerControlsProps): ReactElement {
 
   const showPauseButton = isPlaying
@@ -47,6 +50,8 @@ export default function BigPlayerControls({
   const seekTo = (position: number) => {
     callbacks.seekTo(position)
   }
+
+
 
   return (
     <div className={ `w-full flex flex-col items-center ${ className }` } >
@@ -76,30 +81,43 @@ export default function BigPlayerControls({
 
       <div
         className={`
-          flex items-center justify-center gap-8
+          flex items-center justify-center gap-8 w-full
         `}
       >
-        <Icon
-          onClick={ () => seekTo(currentTime - 10) }
-          icon={ <ArrowUturnLeftIcon /> }
-          size='medium'
-        />
 
-        <Icon
-          onClick={ () => showPauseButton ? pause() : play() }
-          icon={
-            showPauseButton
-              ? <PauseIcon />
-              : <PlayIcon />
-          }
-          size='large'
-        />
+        <div/>
 
-        <Icon
-          onClick={ () => seekTo(currentTime + 30) }
-          icon={ <ArrowUturnRightIcon /> }
-          size='medium'
-        />
+        <div className='flex items-center justify-center gap-8'>
+          <Icon
+            onClick={ () => seekTo(currentTime - 10) }
+            icon={ <ArrowUturnLeftIcon /> }
+            size='medium'
+          />
+
+          <Icon
+            onClick={ () => showPauseButton ? pause() : play() }
+            icon={
+              showPauseButton
+                ? <PauseIcon />
+                : <PlayIcon />
+            }
+            size='large'
+          />
+
+          <Icon
+            onClick={ () => seekTo(currentTime + 30) }
+            icon={ <ArrowUturnRightIcon /> }
+            size='medium'
+          />
+        </div>
+
+        <div className='flex relative items-center '>
+          <VolumeBar
+            onVolumedChanged={ callbacks.changeVolume }
+            volume={ volume }
+          />
+        </div>
+
       </div>
 
     </div>

@@ -8,16 +8,19 @@ import {
 import { ReactElement } from 'react'
 
 import { Icon } from '../icon'
+import { VolumeBar } from '../volume-bar'
 
 export type SmallControlsProps = {
   currentTime: number
   duration: number
   isPlaying: boolean
   callbacks: {
+    changeVolume: (volume: number) => void
     play: () => void
     pause: () => void
     seekTo: (position: number) => void
-  }
+  },
+  volume: number
 
   backgroundColor?: string
 }
@@ -26,7 +29,8 @@ export function SmallControls({
   backgroundColor,
   callbacks,
   currentTime,
-  isPlaying
+  isPlaying,
+  volume
 }: SmallControlsProps): ReactElement | null {
 
   const showPauseButton = isPlaying
@@ -50,6 +54,8 @@ export function SmallControls({
         backgroundColor={ backgroundColor}
         onClick={ () => seekTo(currentTime - 10) }
         icon={ <ArrowUturnLeftIcon /> }
+        iconColor='text-slate-600'
+        iconHoverColor='text-slate-400'
         size='small'
       />
 
@@ -61,6 +67,8 @@ export function SmallControls({
             ? <PauseIcon />
             : <PlayIcon />
         }
+        iconColor='text-slate-600'
+        iconHoverColor='text-slate-400'
         size='medium'
       />
 
@@ -68,7 +76,16 @@ export function SmallControls({
         backgroundColor={ backgroundColor}
         onClick={ () => seekTo(currentTime + 30) }
         icon={ <ArrowUturnRightIcon /> }
+        iconColor='text-slate-600'
+        iconHoverColor='text-slate-400'
         size='small'
+      />
+
+      <VolumeBar
+        iconColor='text-slate-600'
+        iconHoverColor='text-slate-400'
+        onVolumedChanged={ callbacks.changeVolume }
+        volume={ volume }
       />
     </div>
   )

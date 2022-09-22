@@ -4,11 +4,22 @@ type IconProps = {
   icon: ReactElement
 
   backgroundColor?: string
+  className?: string
+  iconColor?: string
+  iconHoverColor?: string
   size?: 'tiny' | 'small' | 'medium' | 'large'
   onClick?: () => void
 }
 
-export function Icon({ backgroundColor, icon, size, onClick }: IconProps): ReactElement {
+export function Icon({
+  icon,
+  backgroundColor,
+  className,
+  iconColor = 'text-slate-300',
+  iconHoverColor = 'text-slate-100',
+  size,
+  onClick
+}: IconProps): ReactElement {
   const containerSize = () => {
     switch (size) {
       case 'tiny':
@@ -40,7 +51,9 @@ export function Icon({ backgroundColor, icon, size, onClick }: IconProps): React
         flex items-center justify-center
         rounded-full
         cursor-pointer
+        ${ iconColor } hover:${ iconHoverColor }
         ${ containerSize() }
+        ${ className }
       `}
       onClick={ onClick }
       style={{
