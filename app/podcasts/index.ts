@@ -12,6 +12,8 @@ export type PodcastDto = {
   imageUrl: string
   slug: string
   title: string
+
+  gradientName?: string
 }
 
 export type PodcastEpisodeDto = {
@@ -81,6 +83,7 @@ function transformPodcast(podcast: Podcast): PodcastDto {
   return {
     author: podcast.author,
     description: podcast.description,
+    gradientName: podcast.gradientName,
     id: podcast.id,
     imageUrl: podcast.imageUrl,
     slug: podcast.slug,

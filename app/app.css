@@ -58,3 +58,13 @@ input[type=range]::-webkit-slider-runnable-track  {
   border: none;
   background: transparent;
 }
+
+
+@keyframes ScrollAnimation {
+  0% {
+    background-position: 0% 0%
+  }
+  100% {
+    background-position: 0% 500%
+  }
+}

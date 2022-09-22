@@ -71,7 +71,7 @@ export function VolumeBar({
         size='small'
       />
       <div
-        className='overflow-hidden flex items-center h-6 ml-1'
+        className='overflow-hidden flex items-center h-6 ml-2'
         style={{
           transition: 'width .2s ease-in-out',
           width: showVolumeBar ? '6rem' : '0px'

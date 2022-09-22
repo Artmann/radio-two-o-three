@@ -11,4 +11,6 @@ export default class Podcast extends BaseModel {
   imageUrl = ''
   slug = ''
   title = ''
+
+  gradientName?: string
 }

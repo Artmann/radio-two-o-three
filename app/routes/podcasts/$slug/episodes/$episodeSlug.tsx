@@ -1,15 +1,15 @@
 import { LoaderFunction } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { MetaFunction } from '@remix-run/react/dist/routeModules'
-import { format, parseISO } from 'date-fns'
+
 import { ReactElement, useContext, useEffect } from 'react'
+import GradientBackground, { GradientName } from '~/components/gradient-background'
 import { NotFoundPage } from '~/components/not-found-page'
 import BigPlayerControls from '~/components/player/big'
 import { PodcastImage } from '~/components/podcast-image'
+import { findPodcastBySlug, PodcastDto, PodcastEpisodeDto } from '~/podcasts'
 import { PlayerContext } from '~/podcast-player'
 import { useHideBottomBar } from '~/podcast-player/use-hide-bottom-bar'
-
-import { findPodcastBySlug, PodcastDto, PodcastEpisodeDto } from '~/podcasts'
 
 type LoaderData = {
   episode: PodcastEpisodeDto | null
@@ -79,12 +79,15 @@ export default function EpisodeRoute(): ReactElement {
     }
   }
 
-  return (
-    <div>
+  const gradientName = podcast.gradientName ?? getGradientName(podcast.id)
 
+  return (
+    <GradientBackground
+      animate={ isPlaying(episode.id) }
+      gradientName={ gradientName }
+    >
       <div
         className={`
-          bg-indigo-800
           text-white
           w-full h-screen
           p-8
@@ -118,6 +121,22 @@ export default function EpisodeRoute(): ReactElement {
         </div>
       </div>
 
-    </div>
+    </GradientBackground>
   )
+}
+
+function getGradientName(id: string): GradientName {
+  const names: GradientName[] = [
+    'chill',
+    'warm',
+    'hot',
+    'cold'
+  ]
+
+  const index = id
+    .split('')
+    .map(c => c.charCodeAt(0))
+    .reduce((a, b) => a + b, 0)
+
+  return names[index % names.length]
 }
