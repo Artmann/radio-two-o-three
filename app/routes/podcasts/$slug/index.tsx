@@ -95,7 +95,6 @@ function EpisodeRow({ episode, podcast }: EpisodeRowProps): ReactElement {
         className={`
           bg-red-400
           w-full max-w-md
-          overflow-scroll
           text-sm
         `}
       >
