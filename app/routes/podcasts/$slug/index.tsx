@@ -1,10 +1,12 @@
+import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/solid'
 import { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { format, parseISO } from 'date-fns'
 import { ReactElement, useState } from 'react'
-import { NotFoundPage } from '~/components/not-found-page'
-import { PodcastImage } from '~/components/podcast-image'
 
+import { NotFoundPage } from '~/components/not-found-page'
+import { Icon } from '~/components/player/icon'
+import { PodcastImage } from '~/components/podcast-image'
 import { findPodcastBySlug, PodcastDto, PodcastEpisodeDto } from '~/podcasts'
 
 type LoaderData = {
@@ -30,11 +32,19 @@ export const meta: MetaFunction = ({ data }) => {
 export default function PodcastRoute(): ReactElement {
   const { podcast, episodes } = useLoaderData<LoaderData>()
 
+  const [ sortDescending, setSortDescending ] = useState(true)
+
   if (!podcast) {
     return (
       <NotFoundPage text='Podcast not found.' />
     )
   }
+
+  const sortedEpisodes = episodes.sort((a, b): number => {
+    const sortToggle = sortDescending ? -1 : 1
+
+    return (a.publishedAt > b.publishedAt ? 1 : -1) * sortToggle
+  })
 
   return (
     <div className='p-8 max-w-xl mx-auto'>
@@ -55,16 +65,32 @@ export default function PodcastRoute(): ReactElement {
         <div className='w-full border-b border-slate-200' />
 
         <div className='flex flex-col gap-4'>
-          {
-            episodes.map(episode => (
-              <EpisodeRow
-                episode={ episode }
-                podcast={ podcast }
 
-                key={ episode.id }
+          <div className='flex justify-end items-center gap-4'>
+            <div>
+              <Icon
+                icon={ sortDescending ? <ArrowDownIcon/> : <ArrowUpIcon /> }
+                size='medium'
+                iconColor='text-slate-500'
+                iconHoverColor='text-slate-300'
+                onClick={ () => { setSortDescending(!sortDescending) } }
               />
-            ))
-          }
+            </div>
+          </div>
+
+          <div className='flex flex-col gap-4'>
+            {
+              sortedEpisodes.map(episode => (
+                <EpisodeRow
+                  episode={ episode }
+                  podcast={ podcast }
+
+                  key={ episode.id }
+                />
+              ))
+            }
+          </div>
+
         </div>
 
       </div>

@@ -4,8 +4,7 @@ import {
   ArrowUturnLeftIcon,
   ArrowUturnRightIcon,
   PauseIcon,
-  PlayIcon,
-  SpeakerWaveIcon
+  PlayIcon
 } from '@heroicons/react/24/solid'
 
 import { Icon } from '../icon'
