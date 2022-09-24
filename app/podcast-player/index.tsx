@@ -176,9 +176,15 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
       return
     }
 
+    if (seekToPosition < 0) {
+      return
+    }
+
     console.log('Seeking to position', seekToPosition)
 
     audioRef.current.currentTime = seekToPosition ?? 0
+
+    setSeekToPosition(-1)
 
   }, [ seekToPosition, isBuffering ])
 
