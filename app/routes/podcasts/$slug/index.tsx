@@ -52,7 +52,7 @@ export default function PodcastRoute(): ReactElement {
 
         <PodcastImage
           alt={ podcast.title }
-          size='medium'
+          size='small'
           src={ podcast.imageUrl }
         />
 
@@ -119,7 +119,6 @@ function EpisodeRow({ episode, podcast }: EpisodeRowProps): ReactElement {
 
       <div
         className={`
-          bg-red-400
           w-full max-w-md
           text-sm
         `}
@@ -139,7 +138,7 @@ function ExpandableText({ text }: { text: string }): ReactElement {
       <div
         className='overflow-hidden mb-4'
         style={{
-          height: expanded ? 'auto' : '5.5rem',
+          height: expanded ? 'auto' : '4.5rem',
         }}
       >
         { text }
