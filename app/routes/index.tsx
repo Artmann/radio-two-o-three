@@ -28,7 +28,7 @@ export default function Index(): ReactElement {
           Popular Podcasts
         </h2>
 
-        <div className='flex gap-6 overflow-x-auto pb-8'>
+        <div className='flex gap-6 overflow-x-auto pb-8 -mx-8'>
           {
             podcasts.map((podcast) => (
               <PodcastCard podcast={ podcast } key={ podcast.id } />
@@ -47,6 +47,7 @@ function PodcastCard({ podcast }: { podcast: PodcastDto }): ReactElement {
       className={`
         flex flex-col shrink-0
         w-32
+        first:ml-8 last:mr-8
       `}
       to={ `/podcasts/${ podcast.slug }` }
     >
