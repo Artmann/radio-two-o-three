@@ -2,11 +2,12 @@ import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/solid'
 import { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { format, parseISO } from 'date-fns'
-import { ReactElement, useState } from 'react'
+import { ReactElement, useContext, useState } from 'react'
 
 import { NotFoundPage } from '~/components/not-found-page'
 import { Icon } from '~/components/player/icon'
 import { PodcastImage } from '~/components/podcast-image'
+import { PlayerContext } from '~/podcast-player'
 import { findPodcastBySlug, PodcastDto, PodcastEpisodeDto } from '~/podcasts'
 
 type LoaderData = {
@@ -33,6 +34,8 @@ export default function PodcastRoute(): ReactElement {
   const { podcast, episodes } = useLoaderData<LoaderData>()
 
   const [ sortDescending, setSortDescending ] = useState(true)
+
+  const { currentTime, duration } = useContext(PlayerContext)
 
   if (!podcast) {
     return (
@@ -78,12 +81,18 @@ export default function PodcastRoute(): ReactElement {
             </div>
           </div>
 
-          <div className='flex flex-col gap-4'>
+          <div className='flex flex-col gap-6'>
             {
               sortedEpisodes.map(episode => (
                 <EpisodeRow
                   episode={ episode }
                   podcast={ podcast }
+
+                  progress={
+                    currentTime(episode.id) && duration(episode.id)
+                    ? currentTime(episode.id) / duration(episode.id)
+                    : undefined
+                  }
 
                   key={ episode.id }
                 />
@@ -101,11 +110,21 @@ export default function PodcastRoute(): ReactElement {
 type EpisodeRowProps = {
   episode: PodcastEpisodeDto
   podcast: PodcastDto
+
+  progress?: number
 }
 
-function EpisodeRow({ episode, podcast }: EpisodeRowProps): ReactElement {
+function EpisodeRow({ episode, podcast, progress }: EpisodeRowProps): ReactElement {
+  const isFinished = progress && progress >= 0.95
+  const isInProgress = progress && !isFinished && progress > 0
+
   return (
-    <div className='flex flex-col gap-2'>
+    <div
+      className={`
+        flex flex-col gap-2
+        ${ isFinished ? 'text-gray-300' : 'text-gray-700' }
+      `}
+    >
       <Link
         className='block w-full font-medium hover:underline'
         to={ `/podcasts/${ podcast.slug }/episodes/${ episode.slug }` }
@@ -113,7 +132,9 @@ function EpisodeRow({ episode, podcast }: EpisodeRowProps): ReactElement {
         { episode.title}
       </Link>
 
-      <div className='text-xs text-gray-500'>
+      <div
+        className={ `text-xs ${ isFinished ? 'text-gray-300' : 'text-gray-500' } `}
+      >
         { format(parseISO(episode.publishedAt), 'MMMM d, yyyy') }
       </div>
 
@@ -122,10 +143,20 @@ function EpisodeRow({ episode, podcast }: EpisodeRowProps): ReactElement {
           w-full max-w-md
           text-sm
         `}
-      >
+      />
 
-      </div>
-
+      {
+        isInProgress && (
+          <div className='w-full bg-slate-100 h-1 rounded-lg'>
+            <div
+              className='bg-purple-700 h-full rounded-lg'
+              style={{
+                width: `${ progress * 100 }%`
+              }}
+            />
+          </div>
+        )
+      }
     </div>
   )
 }
