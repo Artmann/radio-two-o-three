@@ -1,6 +1,7 @@
 import { startTransaction } from '@sentry/minimal'
 import { createHash } from 'crypto'
 import dayjs from 'dayjs'
+import fetch from 'node-fetch'
 //@ts-ignore
 import * as parser from 'node-podcast-parser'
 
