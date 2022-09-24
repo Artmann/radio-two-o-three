@@ -51,7 +51,7 @@ export function BottomBar(): ReactElement | null {
         border: '1px solid rgba(222, 237, 242, 0.35)'
       }}
     >
-      <div className='flex gap-4 items-center md:mb-1'>
+      <div className='flex gap-4 items-center w-full max-w-3xl mx-auto md:mb-1'>
         <div>
           <PodcastImage
             alt={ episode.title }
@@ -78,7 +78,7 @@ export function BottomBar(): ReactElement | null {
         </div>
       </div>
 
-      <div>
+      <div className='w-full max-w-3xl mx-auto'>
         <TrackBar
           backgroundColor='rgba(139, 92, 246, 0.6)'
 
