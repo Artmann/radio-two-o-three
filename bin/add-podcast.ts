@@ -19,6 +19,8 @@ async function main() {
   console.log(`Adding ${ title } to the podcast list.`)
 
   await createPodcast(title, url)
+
+  process.exit(0)
 }
 
 main()
