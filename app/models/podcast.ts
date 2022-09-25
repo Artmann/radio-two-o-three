@@ -10,6 +10,7 @@ export default class Podcast extends BaseModel {
   hasBeenScraped = false
   imageUrl = ''
   slug = ''
+  tags: string[] = []
   title = ''
 
   gradientName?: string

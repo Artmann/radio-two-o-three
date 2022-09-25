@@ -11,6 +11,7 @@ export type PodcastDto = {
   id: string
   imageUrl: string
   slug: string
+  tags: string[]
   title: string
 
   gradientName?: string
@@ -87,6 +88,7 @@ function transformPodcast(podcast: Podcast): PodcastDto {
     id: podcast.id,
     imageUrl: podcast.imageUrl,
     slug: podcast.slug,
+    tags: podcast.tags || [],
     title: podcast.title
   }
 }
