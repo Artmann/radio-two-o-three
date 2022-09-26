@@ -41,6 +41,7 @@ export default function EpisodeRoute(): ReactElement {
     changeVolume,
     currentTime,
     duration,
+    isBuffering,
     isPlaying,
     play,
     pause,
@@ -106,9 +107,12 @@ export default function EpisodeRoute(): ReactElement {
           />
 
           <div className='w-full text-center mb-8'>
-            <h1 className='text-lg w-full'>
+            <h1 className='text-lg w-full mb-4'>
               { episode.title }
             </h1>
+            <h2>
+              { isBuffering ? 'Buffering...' : podcast.title }
+            </h2>
           </div>
 
           <BigPlayerControls

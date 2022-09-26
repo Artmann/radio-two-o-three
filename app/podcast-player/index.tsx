@@ -16,6 +16,7 @@ export interface PlayerContextProps {
   currentTime: (episodeId: string) => number
   duration: (episodeId: string) => number
   hideBottomBar: () => void
+  isBuffering: boolean
   isPlaying: (episodeId: string) => boolean
   play: (episode: PodcastEpisodeDto) => void
   pause: () => void
@@ -268,6 +269,7 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
     duration,
     episode: currentEpisode,
     hideBottomBar,
+    isBuffering,
     isPlaying,
     play,
     pause,
