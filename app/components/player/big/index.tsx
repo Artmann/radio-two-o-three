@@ -84,7 +84,7 @@ export default function BigPlayerControls({
         `}
       >
 
-        <div/>
+        <div className='flex-1' />
 
         <div className='flex items-center justify-center gap-8'>
           <Icon
