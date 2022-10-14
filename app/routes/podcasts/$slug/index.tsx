@@ -122,7 +122,7 @@ function EpisodeRow({ episode, podcast, progress }: EpisodeRowProps): ReactEleme
     <div
       className={`
         flex flex-col gap-2
-        ${ isFinished ? 'text-gray-300' : 'text-gray-700' }
+        ${ isFinished ? 'text-gray-300 dark:text-dark-300' : 'text-gray-700 dark:text-dark-100' }
       `}
     >
       <Link
@@ -133,7 +133,7 @@ function EpisodeRow({ episode, podcast, progress }: EpisodeRowProps): ReactEleme
       </Link>
 
       <div
-        className={ `text-xs ${ isFinished ? 'text-gray-300' : 'text-gray-500' } `}
+        className={ `text-xs ${ isFinished ? 'text-gray-300 dark:text-dark-300' : 'text-gray-500 dark:text-dark-200' } `}
       >
         { format(parseISO(episode.publishedAt), 'MMMM d, yyyy') }
       </div>

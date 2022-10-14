@@ -3,7 +3,6 @@ import { ReactElement } from 'react'
 type IconProps = {
   icon: ReactElement
 
-  backgroundColor?: string
   className?: string
   iconColor?: string
   iconHoverColor?: string
@@ -13,7 +12,6 @@ type IconProps = {
 
 export function Icon({
   icon,
-  backgroundColor,
   className,
   iconColor = 'text-slate-300',
   iconHoverColor = 'text-slate-100',
@@ -56,9 +54,6 @@ export function Icon({
         ${ className }
       `}
       onClick={ onClick }
-      style={{
-        backgroundColor: backgroundColor ?? 'rgba(255, 255, 255, 0.15)'
-      }}
     >
       <div className={ iconSize() }>
         { icon }

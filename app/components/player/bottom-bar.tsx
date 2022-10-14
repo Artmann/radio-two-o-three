@@ -44,14 +44,11 @@ export function BottomBar(): ReactElement | null {
       className={`
         fixed bottom-0 left-0 right-0
         p-3 md:py-4 md:px-6
+        backdrop-blur
+        bg-gray-50 bg-opacity-50 dark:bg-dark-800
       `}
-      style={{
-        background: 'rgba(250, 250, 255, 0.73)',
-        backdropFilter: 'blur(7.6px)',
-        border: '1px solid rgba(222, 237, 242, 0.35)'
-      }}
     >
-      <div className='flex gap-4 items-center w-full max-w-3xl mx-auto md:mb-1'>
+      <div className='flex gap-4 items-center w-full max-w-3xl mx-auto md:mb-2'>
         <div>
           <PodcastImage
             alt={ episode.title }

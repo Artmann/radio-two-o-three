@@ -7,7 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react'
-import { StrictMode } from 'react'
+import { createContext, StrictMode, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import styles from './app.css'
 import { BottomBar } from './components/player/bottom-bar'
@@ -31,21 +31,61 @@ export const meta: MetaFunction = () => ({
   'google-site-verification': 'gzmBSaol-4iwzsg9IqkkjMVam1ym1Q4HHm7cRskerSU'
 })
 
+export const ThemeContext = createContext<{ isDarkMode: boolean, toggleDarkMode: () => void }>({} as any)
+
 export default function App() {
+  const htmlRef = useRef<HTMLHtmlElement>(null)
+
+  const [ isDarkMode, setIsDarkMode ] = useState(false)
+
+  useLayoutEffect(() => {
+    if (userWantsDarkMode()) {
+      setIsDarkMode(true)
+    }
+  }, [])
+
+   useEffect(() => {
+    if (!htmlRef.current) {
+      return
+    }
+
+    if (isDarkMode) {
+      htmlRef.current.classList.add('dark')
+    } else {
+      htmlRef.current.classList.remove('dark')
+    }
+
+  }, [htmlRef, isDarkMode])
+
+  const toggleDarkMode = (): void  => {
+    const newDarkModeValue = !isDarkMode
+
+    localStorage.setItem('darkMode', newDarkModeValue ? 'true' : 'false')
+    setIsDarkMode(newDarkModeValue)
+  }
+
   return (
-    <html lang='en'>
+    <html ref={ htmlRef } lang='en'>
       <head>
         <Meta />
         <Links />
       </head>
-      <body className='text-gray-700 pb-24'>
+      <body
+        className={`
+          pb-24
+          text-gray-700
+          dark:bg-dark-500 dark:text-white
+        `}
+      >
 
         <StrictMode>
+          <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
           <PodcastPlayer>
             <Outlet />
 
             <BottomBar />
           </PodcastPlayer>
+          </ThemeContext.Provider>
         </StrictMode>
 
         <ScrollRestoration />
@@ -55,4 +95,19 @@ export default function App() {
       </body>
     </html>
   )
+}
+
+
+function userWantsDarkMode(): boolean {
+  const darkModePreference = localStorage && localStorage.getItem('darkMode')
+
+  if (darkModePreference === 'true') {
+    return true
+  }
+
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return true
+  }
+
+  return false
 }

@@ -7,6 +7,7 @@ type VolumeBarProps = {
   onVolumedChanged: (volume: number) => void
   volume: number
 
+  iconClassName?: string
   iconColor?: string
   iconHoverColor?: string
 }
@@ -14,6 +15,7 @@ type VolumeBarProps = {
 export function VolumeBar({
   onVolumedChanged,
   volume,
+  iconClassName,
   iconColor,
   iconHoverColor
 }: VolumeBarProps): ReactElement {
@@ -64,7 +66,7 @@ export function VolumeBar({
       ref={ volumeContainerRef }
     >
       <Icon
-        className=''
+        className={ `bg-gray-200 bg-opacity-50 dark:bg-dark-500 dark:text-white ${ iconClassName }` }
         icon={ <SpeakerWaveIcon /> }
         iconColor={ iconColor }
         iconHoverColor={ iconHoverColor }

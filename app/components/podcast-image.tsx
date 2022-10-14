@@ -56,7 +56,7 @@ export function PodcastImage({ alt, src, size = 'medium' }: PodcastImageProps): 
       className={`
         ${ imageSize() }
         block
-        rounded-lg shadow-md
+        rounded-lg shadow-md dark:shadow-lg
       `}
     />
   )

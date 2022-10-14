@@ -88,12 +88,14 @@ export default function BigPlayerControls({
 
         <div className='flex items-center justify-center gap-8'>
           <Icon
+            className='bg-gray-600 bg-opacity-20'
             onClick={ () => seekTo(currentTime - 10) }
             icon={ <ArrowUturnLeftIcon /> }
             size='medium'
           />
 
           <Icon
+            className='bg-gray-600 bg-opacity-20'
             onClick={ () => showPauseButton ? pause() : play() }
             icon={
               showPauseButton
@@ -104,6 +106,7 @@ export default function BigPlayerControls({
           />
 
           <Icon
+            className='bg-gray-600 bg-opacity-20'
             onClick={ () => seekTo(currentTime + 30) }
             icon={ <ArrowUturnRightIcon /> }
             size='medium'
@@ -112,6 +115,7 @@ export default function BigPlayerControls({
 
         <div className='flex relative items-center '>
           <VolumeBar
+            iconClassName='bg-gray-600 bg-opacity-20 dark:bg-gray-600 dark:bg-opacity-20'
             onVolumedChanged={ callbacks.changeVolume }
             volume={ volume }
           />

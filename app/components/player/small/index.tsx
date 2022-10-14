@@ -51,7 +51,7 @@ export function SmallControls({
       `}
     >
       <Icon
-        backgroundColor={ backgroundColor}
+        className='bg-gray-200 bg-opacity-50 dark:bg-dark-500 dark:text-white'
         onClick={ () => seekTo(currentTime - 10) }
         icon={ <ArrowUturnLeftIcon /> }
         iconColor='text-slate-600'
@@ -60,7 +60,7 @@ export function SmallControls({
       />
 
       <Icon
-        backgroundColor={ backgroundColor}
+        className='bg-gray-200 bg-opacity-50 dark:bg-dark-500 dark:text-white'
         onClick={ () => showPauseButton ? pause() : play() }
         icon={
           showPauseButton
@@ -73,8 +73,8 @@ export function SmallControls({
       />
 
       <Icon
-        backgroundColor={ backgroundColor}
-        onClick={ () => seekTo(currentTime + 30) }
+        className='bg-gray-200 bg-opacity-50 dark:bg-dark-500 dark:text-white'
+        onClick={ () => seekTo(currentTime + 10) }
         icon={ <ArrowUturnRightIcon /> }
         iconColor='text-slate-600'
         iconHoverColor='text-slate-400'

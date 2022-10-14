@@ -1,9 +1,11 @@
 import { LoaderFunction } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
-import { ReactElement, useState } from 'react'
-import { PodcastImage } from '~/components/podcast-image'
+import { ReactElement, useContext, useState } from 'react'
+import { DarkModeSwitch } from 'react-toggle-dark-mode'
 
+import { PodcastImage } from '~/components/podcast-image'
 import { listAllPodcasts, PodcastDto } from '~/podcasts'
+import { ThemeContext } from '~/root'
 
 type LoaderData = {
   podcasts: PodcastDto[]
@@ -20,23 +22,32 @@ export const loader: LoaderFunction = async () => {
 export default function Index(): ReactElement {
   const { podcasts } = useLoaderData<LoaderData>()
 
+  const { isDarkMode, toggleDarkMode } = useContext(ThemeContext)
+
   const withTag = (tag: string): PodcastDto[] => podcasts.filter(podcast => podcast.tags.includes(tag.toLowerCase()))
 
   return (
-    <div className='flex flex-col gap-8 pt-20'>
+    <div className='flex flex-col gap-8 pt-20 pb-32'>
 
       <div
         className={`
           fixed top-0 left-0 right-0
           backdrop-blur
-          border-b border-slate-100 p-4
+          border-b border-slate-100 p-4 dark:border-none
+          bg-gray-50 bg-opacity-50 dark:bg-dark-800
+          flex items-center justify-center
         `}
-        style={{
-          background: 'rgba(250, 250, 255, 0.73)'
-        }}
       >
-        <div className='w-full max-w-3xl mx-auto flex flex-col justify-center items-center'>
+        <div></div>
+        <div className='w-full flex-1 max-w-3xl mx-auto flex flex-col justify-center items-center'>
           <SearchBar podcasts={ podcasts } />
+        </div>
+        <div>
+          <DarkModeSwitch
+            checked={isDarkMode}
+            onChange={toggleDarkMode}
+            size={20}
+          />
         </div>
       </div>
 
@@ -105,7 +116,7 @@ function PodcastCard({ podcast }: { podcast: PodcastDto }): ReactElement {
       <div
         className={`
           w-full truncate
-          text-xs text-gray-500
+          text-xs text-gray-500 dark:text-dark-200
         `}
       >
         { podcast.author }
@@ -128,9 +139,10 @@ function SearchBar({ podcasts }: { podcasts: PodcastDto[] }): ReactElement {
         className={`
           bg-transparent
           w-full
-          outline-none border border-slate-200 rounded
+          outline-none border border-slate-200 rounded dark:border-dark-800
           px-2 py-1
           text-xs text-gray-500 text-center
+          dark:bg-white dark:text-gray-700
         `}
         onChange={ (event) => setQuery(event.currentTarget.value) }
         placeholder='Search for Podcasts'
@@ -147,6 +159,7 @@ function SearchBar({ podcasts }: { podcasts: PodcastDto[] }): ReactElement {
               py-2
               text-gray-700
               max-h-56 overflow-y-auto
+              dark:bg-dark-800 dark:border-dark-800
             `}
           >
 
@@ -158,6 +171,7 @@ function SearchBar({ podcasts }: { podcasts: PodcastDto[] }): ReactElement {
                     flex gap-4 items-center
                     px-4 py-2 md:py-3
                     text-xs md:text-sm
+                    dark:text-white
                   `}
                 >
                   <div>
