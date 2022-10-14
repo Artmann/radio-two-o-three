@@ -281,7 +281,11 @@ export function PodcastPlayer({ children }: PodcastPlayerProps): ReactElement {
   return (
     <>
 
-      <audio ref={ audioRef } className="invisible">
+      <audio
+        className='invisible'
+        data-testid='audio'
+        ref={ audioRef }
+      >
         <source
           src={ currentEpisode?.source?.url}
           type={ currentEpisode?.source?.type }

@@ -12,7 +12,9 @@
     "generate:css": "npx tailwindcss -o ./app/tailwind.css",
     "podcast:add": "ts-node bin/add-podcast.ts",
     "podcast:scrape": "ts-node bin/scrape-podcast.ts",
-    "start": "cross-env NODE_ENV=production node ./server.js"
+    "start": "cross-env NODE_ENV=production node ./server.js",
+    "test": "jest --coverage --forceExit",
+    "test:watch": "jest --watchAll"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.11",
@@ -47,9 +49,9 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/date-fns": "^2.6.0",
-    "@types/jest": "^29.0.2",
+    "@types/jest": "^29.0.3",
     "@types/lodash": "^4.14.185",
-    "@types/node": "^18.7.18",
+    "@types/node": "^18.7.23",
     "@types/node-fetch": "^2.6.2",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
