@@ -35,6 +35,8 @@ async function imageRoute(request, response) {
     response.set('Cache-Control', `public, max-age=${  expiresInSeconds }, s-maxage=${  expiresInSeconds  }, stale-while-revalidate`)
 
     response.end(image, 'binary')
+
+    return
   } catch (error) {
     console.error(error)
   }
