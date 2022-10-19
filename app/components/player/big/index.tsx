@@ -86,7 +86,7 @@ export default function BigPlayerControls({
 
         <div className='flex-1' />
 
-        <div className='flex items-center justify-center gap-8'>
+        <div className='flex items-center justify-center gap-8 flex-1'>
           <Icon
             className='bg-gray-600 bg-opacity-20'
             onClick={ () => seekTo(currentTime - 10) }
@@ -113,7 +113,7 @@ export default function BigPlayerControls({
           />
         </div>
 
-        <div className='flex relative items-center '>
+        <div className='flex relative items-center flex-1'>
           <VolumeBar
             iconClassName='bg-gray-600 bg-opacity-20 dark:bg-gray-600 dark:bg-opacity-20'
             onVolumedChanged={ callbacks.changeVolume }
